@@ -1,44 +1,62 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   Dimensions,
   FlatList,
   ListRenderItemInfo,
+  Text,
   View,
-  useColorScheme,
 } from 'react-native';
 import {QuestionItem} from '../../molecules/question-item/question-item';
+import {QuestionI} from '../../../interfaces/question.interface';
+import {getNextQuestion} from '../../../services/teach-tok-service/teach-tok-service';
 
 export const ScrollabelQuestionList = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-  const [numbers, setNumbers] = useState([0, 1, 2, 3, 4, 5]);
+  const [questions, setQuestions] = useState<QuestionI[]>([]);
+  const [repeatedQuestionCount, setRepeatedQuestionCount] = useState(0);
+  const questionPerPetition = 5;
+  const maxRepeatedQuestions = 15;
 
-  const loadMore = () => {
-    console.log('loading more');
-    const newArray: number[] = [];
-    for (let i = 0; i < 5; i++) {
-      newArray[i] = numbers.length + i;
+  const filterRepeatedQuestions = (newQuestion: QuestionI) => {
+    setQuestions(prevQuestions => {
+      const ids = prevQuestions.map(({id}) => id);
+
+      if (!ids.includes(newQuestion.id)) {
+        setRepeatedQuestionCount(0);
+        return [...prevQuestions, newQuestion];
+      }
+      setRepeatedQuestionCount(prevCount => prevCount + 1);
+      return prevQuestions;
+    });
+  };
+
+  const loadMore = async () => {
+    if (repeatedQuestionCount >= maxRepeatedQuestions) return;
+    for (let index = 0; index < questionPerPetition; index++) {
+      const newQuestion = await getNextQuestion();
+      filterRepeatedQuestions(newQuestion);
     }
-
-    setTimeout(() => {
-      setNumbers([...numbers, ...newArray]);
-    }, 1500);
   };
 
   const {height} = Dimensions.get('window');
 
-  const renderItem = ({item}: ListRenderItemInfo<number>) => {
-    return <QuestionItem img={`https://picsum.photos/id/${item}/500/400`} />;
+  const renderItem = ({item}: ListRenderItemInfo<QuestionI>) => {
+    return <QuestionItem question={item} />;
   };
+
+  useEffect(() => {
+    loadMore();
+  }, []);
+
   return (
     <FlatList
-      data={numbers}
+      data={questions}
       decelerationRate={'fast'}
       snapToInterval={height}
-      keyExtractor={item => item.toString()} //TODO: KEY MUST BE ID
+      keyExtractor={item => `${item.id}`}
       renderItem={renderItem}
       onEndReached={loadMore}
-      onEndReachedThreshold={1}
+      onEndReachedThreshold={0}
       ListFooterComponent={() => (
         <View
           style={{
@@ -47,7 +65,12 @@ export const ScrollabelQuestionList = () => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <ActivityIndicator size={25} />
+          {repeatedQuestionCount < maxRepeatedQuestions && (
+            <ActivityIndicator size={25} />
+          )}
+          {repeatedQuestionCount >= maxRepeatedQuestions && (
+            <Text>There are no more questions</Text>
+          )}
         </View>
       )}
     />
