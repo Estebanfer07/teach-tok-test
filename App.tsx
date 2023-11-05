@@ -1,9 +1,10 @@
 import React from 'react';
-import {StatusBar, StyleSheet, Text, View} from 'react-native';
+import {StatusBar} from 'react-native';
 
 import {ScrollabelQuestionList} from './src/components/organisms/scrollable-questions-list/scrollable-question-list';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,14 +19,46 @@ const App = () => {
             let icon!: string;
             switch (route.name) {
               case 'Home':
-                icon = 'airplane-outline';
+                icon = 'home';
+                break;
+              case 'Discover':
+                icon = 'compass';
+                break;
+              case 'Activity':
+                icon = 'stopwatch';
+                break;
+              case 'Bookmarks':
+                icon = 'bookmark';
+                break;
+              case 'Profile':
+                icon = 'person';
                 break;
             }
-            return <Text>icon</Text>;
+            return <Icon name={icon} size={30} color={color} />;
           },
         })}>
         <Tab.Screen
           name="Home"
+          options={{headerShown: false}}
+          component={ScrollabelQuestionList}
+        />
+        <Tab.Screen
+          name="Discover"
+          options={{headerShown: false}}
+          component={ScrollabelQuestionList}
+        />
+        <Tab.Screen
+          name="Activity"
+          options={{headerShown: false}}
+          component={ScrollabelQuestionList}
+        />
+        <Tab.Screen
+          name="Bookmarks"
+          options={{headerShown: false}}
+          component={ScrollabelQuestionList}
+        />
+        <Tab.Screen
+          name="Profile"
           options={{headerShown: false}}
           component={ScrollabelQuestionList}
         />
