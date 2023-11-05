@@ -1,10 +1,10 @@
 import React from 'react';
 import {StatusBar} from 'react-native';
 
-import {ScrollabelQuestionList} from './src/components/organisms/scrollable-questions-list/scrollable-question-list';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {ScrollabelQuestionList} from './src/components/organisms/scrollable-questions-list/scrollable-question-list';
 
 const Tab = createBottomTabNavigator();
 

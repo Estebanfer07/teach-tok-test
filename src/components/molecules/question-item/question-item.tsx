@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   },
   optionsWrapper: {
     position: 'absolute',
-    top: '45%',
+    bottom: '22%',
     width: '85%',
   },
   optionBox: {
@@ -161,11 +161,12 @@ const styles = StyleSheet.create({
       },
     }),
     backgroundColor: 'rgba(255, 255, 255, 0.4)',
-    margin: 8,
+    marginVertical: 4,
+    marginHorizontal: 10,
     padding: 16,
   },
   optionText: {
-    fontSize: 18,
+    fontSize: 16,
     color: 'white',
     textShadowColor: 'rgba(0, 0, 0, 0.45)',
     textShadowOffset: {width: 1, height: 1},
