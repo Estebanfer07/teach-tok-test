@@ -24,6 +24,8 @@
     "@babel/core": "^7.12.9",
     "@babel/runtime": "^7.12.5",
     "@react-native-community/eslint-config": "^2.0.0",
+    "@testing-library/jest-native": "^5.4.3",
+    "@testing-library/react-native": "^12.3.2",
     "@tsconfig/react-native": "^2.0.2",
     "@types/jest": "^26.0.23",
     "@types/react": "^18.0.21",
@@ -34,7 +36,7 @@
     "@typescript-eslint/parser": "^5.37.0",
     "babel-jest": "^26.6.3",
     "eslint": "^7.32.0",
-    "jest": "^26.6.3",
+    "jest": "^27.0.0",
     "metro-react-native-babel-preset": "0.72.3",
     "react-native-dotenv": "^3.4.9",
     "react-test-renderer": "18.1.0",
@@ -42,6 +44,9 @@
   },
   "jest": {
     "preset": "react-native",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(@react-native|react-native|react-native-vector-icons)/)"
+    ],
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -49,6 +54,12 @@
       "jsx",
       "json",
       "node"
-    ]
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest-setup.ts"
+    ],
+    "moduleNameMapper": {
+      "^axios$": "axios/dist/node/axios.cjs"
+    }
   }
 }

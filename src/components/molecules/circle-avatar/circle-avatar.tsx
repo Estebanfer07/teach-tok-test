@@ -12,7 +12,7 @@ export const CircleAvatar: FC<CircleAvatarProps> = ({uri}) => {
       <View style={styles.avatarFollow}>
         <Icon name="add" color={'white'} size={20} />
       </View>
-      <Image source={{uri}} style={styles.avatarImage} />
+      <Image testID="avatar-image" source={{uri}} style={styles.avatarImage} />
     </View>
   );
 };

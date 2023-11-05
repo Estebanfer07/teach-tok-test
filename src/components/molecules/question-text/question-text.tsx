@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import {HighlightedText} from '../../atoms/highlighted-text/highlighted-text';
 
 interface QuestionTextProps {
   question: string;
@@ -7,11 +8,9 @@ interface QuestionTextProps {
 
 export const QuestionText: FC<QuestionTextProps> = ({question}) => {
   const highlight = () =>
-    question.split(' ').map((word, i) => (
-      <View key={i}>
-        <Text style={styles.highlighted}>{word}</Text>
-      </View>
-    ));
+    question
+      .split(' ')
+      .map((word, i) => <HighlightedText text={word} key={i} />);
 
   return (
     <View style={styles.questionWrapper}>
@@ -28,12 +27,5 @@ const styles = StyleSheet.create({
   },
   questionText: {
     marginLeft: 10,
-  },
-  highlighted: {
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    fontSize: 25,
-    paddingLeft: 4,
-    paddingRight: 4,
-    color: 'white',
   },
 });
