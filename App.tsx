@@ -15,7 +15,8 @@ const App = () => {
       <Tab.Navigator
         screenOptions={({route}) => ({
           tabBarStyle: {backgroundColor: '#000'},
-          tabBarIcon: ({color, focused}) => {
+          tabBarActiveTintColor: 'white',
+          tabBarIcon: ({color}) => {
             let icon!: string;
             switch (route.name) {
               case 'Home':

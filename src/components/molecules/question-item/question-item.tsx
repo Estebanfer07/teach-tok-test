@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {
   Dimensions,
   View,
@@ -7,20 +7,46 @@ import {
   ImageBackground,
   Platform,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import {QuestionI} from '../../../interfaces/question.interface';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {verifyAnswer} from '../../../services/teach-tok-service/teach-tok-service';
 
 interface QuestionItemProps {
   question: QuestionI;
 }
 
 export const QuestionItem: FC<QuestionItemProps> = ({
-  question: {image: uri, question, options, description, user, playlist},
+  question: {image: uri, question, options, description, user, playlist, id},
 }) => {
-  console.log('=============QUESTION================');
-  console.log(question);
   const {height} = Dimensions.get('window');
+  const [selectedAnswer, setSelectedAnswer] = useState('');
+  const [correctAnswer, setCorrectAnswer] = useState('');
+
+  useEffect(() => {
+    getAnswer();
+  }, []);
+
+  const getAnswer = async () => {
+    const {correct_options} = await verifyAnswer(id);
+    setCorrectAnswer(correct_options[0].id);
+  };
+
+  const getStyle = (currentOption: string) => {
+    if (selectedAnswer !== '' && currentOption === correctAnswer) {
+      return {backgroundColor: 'green'};
+    }
+    if (
+      selectedAnswer !== '' &&
+      selectedAnswer !== correctAnswer &&
+      currentOption === selectedAnswer
+    ) {
+      return {backgroundColor: 'red'};
+    }
+
+    return {};
+  };
 
   const highlight = (string: string) =>
     string.split(' ').map((word, i) => (
@@ -65,11 +91,12 @@ export const QuestionItem: FC<QuestionItemProps> = ({
         </View>
         <View style={styles.optionsWrapper}>
           {options.map(({id, answer}) => (
-            <View style={styles.optionBox}>
-              <Text style={styles.optionText} key={id}>
-                {answer}
-              </Text>
-            </View>
+            <TouchableOpacity
+              style={{...styles.optionBox, ...getStyle(id)}}
+              key={id}
+              onPress={() => setSelectedAnswer(id)}>
+              <Text style={styles.optionText}>{answer}</Text>
+            </TouchableOpacity>
           ))}
         </View>
         <View style={styles.descriptionWrapper}>
