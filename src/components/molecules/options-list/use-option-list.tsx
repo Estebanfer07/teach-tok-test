@@ -14,8 +14,11 @@ export const useOptionlist = ({questionId}: UseOptionListProps) => {
   }, []);
 
   const getAnswer = async () => {
-    const {correct_options} = await verifyAnswer(questionId);
-    setCorrectAnswer(correct_options[0].id);
+    const answer = await verifyAnswer(questionId);
+    if (answer) {
+      const {correct_options} = answer;
+      setCorrectAnswer(correct_options[0].id);
+    }
   };
 
   return {correctAnswer, selectedAnswer, setSelectedAnswer};

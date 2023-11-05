@@ -32,7 +32,7 @@ export const useScrollableQuestionList = () => {
     if (repeatedQuestionCount >= maxRepeatedQuestions) return;
     for (let index = 0; index < questionPerPetition; index++) {
       const newQuestion = await getNextQuestion();
-      filterRepeatedQuestions(newQuestion);
+      if (newQuestion) filterRepeatedQuestions(newQuestion);
     }
   };
 
